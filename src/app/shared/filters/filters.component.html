@@ -1,0 +1,68 @@
+<div class="grid">
+    <p-panel header="Parametros" class="col-12">
+      <form class="flex flex-column" [formGroup]="formGroup">
+        <div class="grid">
+          <div class="col-6">
+            <p-fieldset legend="Frecuencia" class="col-12">
+
+              <div *ngFor="let category of periodo" class="field-checkbox">
+                <p-radioButton [inputId]="category.key" [value]="category" formControlName="selectedCategory"></p-radioButton>
+                <label [for]="category.key" class="ml-2">{{ category.name }}</label>
+              </div>
+
+            </p-fieldset> 
+          </div>
+          <div class="col-6">
+            <p-fieldset legend="Ubicación" class="col-12">
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="flex flex-wrap align-items-center justify-content-center card-container">
+                            <p>Departamento</p>  
+                            <p-dropdown class="absolute align-items-center" [options]="departamentos" [(ngModel)]="selectedDepartamento" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Todos">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="flex align-items-center gap-2" *ngIf="selectedDepartamento">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedDepartamento.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ selectedDepartamento.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-country pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ country.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown> 
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-wrap align-items-center justify-content-center card-container">
+                            <p>Municipio</p>  
+                            <p-dropdown class="absolute align-items-center" [options]="municipios"   optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Todos">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="flex align-items-center gap-2" *ngIf="selectedMunicipio">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedMunicipio.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ selectedMunicipio.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-country pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+                                        <div>{{ country.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>           
+            </p-fieldset> 
+          </div>
+        </div>
+        <div class="grid">
+          <div class="flex flex-wrap align-items-center justify-content-center card-container">
+            <p-button class="px-2 m-2" label="Limpiar parámetros" styleClass="p-button-raised p-button-secondary border-noround"></p-button>
+            <p-button class="px-2 m-2" label="Mostrar datos" styleClass="p-button-raised p-button-secondary border-noround"></p-button>
+          </div>
+        </div>
+      </form>
+  </p-panel>
+  </div>
