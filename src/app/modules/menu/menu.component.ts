@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
+import { MercantilReportService } from "src/app/services/mercantil-report.service";
+
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  providers: [MessageService]
+  providers: []
 })
 export class MenuComponent implements OnInit {
 
   items: MenuItem[] = [];
-  constructor( private messageService:MessageService) {}
+  constructor( private mercantilReport:MercantilReportService) {}
 
   ngOnInit() {
     this.items = [
@@ -18,33 +20,19 @@ export class MenuComponent implements OnInit {
           items: [
               {
                   label: 'Sociedades inscritas',                  
-                  command: () => {
-                      this.update();
-                  }
+                  routerLink:['/sociedadesInscritas']                                  
               },
               {
                   label: 'Aperturas de Sucursales',                  
-                  command: () => {
-                      this.delete();
-                  }
+                  routerLink:['/sucursales']
               },
               {
                 label: 'Comerciantes inscritos',                
-                command: () => {
-                    this.delete();
-                }
-            }
+                routerLink:['/comerciantes']
+              }
           ]
       }      
-  ];
-  }
-
-  update() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Data Updated' });
-    }
-
-  delete() {
-      this.messageService.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted' });
-  }
+    ];
+  } 
 
 }

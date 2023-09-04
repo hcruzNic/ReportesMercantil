@@ -1,0 +1,15 @@
+.empty-contianer::after{
+    content: "Elija un tipo de reporte del menú lateral";
+    height: 200px;
+    text-align: center;
+    margin: auto;
+    line-height: 200px;
+}
+
+.p-menu-custom {
+    padding: 0.25rem 0;
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+  }

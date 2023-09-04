@@ -1,56 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MercantilReportService } from 'src/app/services/mercantil-report.service';
+import { IDepartamento,IMunicipio} from 'src/app/Interfaces/ICatalogos'
+
+
 
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.css']
+  styleUrls: ['./filters.component.css'],  
 })
 export class FiltersComponent implements OnInit {
 
-  selectedOption: any;
-  options = [
-    { label: 'Opción 1', value: 'opcion1' },
-    { label: 'Opción 2', value: 'opcion2' },
-    { label: 'Opción 3', value: 'opcion3' }
-  ];
-
+  public selectedDepartamento:IDepartamento ={IdDepartamento:0, Departamento:''};
+  listaDepartamentos:IDepartamento[] = [];
+  public selectedMunicipio:IMunicipio ={IdMunicipio:0, Municipio:'',IdDepartamento:0, Departamento:''};
+  listaMunicipios:IMunicipio[] = [];
+  Municipios:IMunicipio[] = [];
 
   formGroup!: FormGroup;
 
-  departamentos: Departamento[] = [];
-  selectedDepartamento!: Departamento;
 
-  municipios: Municipio[] = [];
-  selectedMunicipio!: Municipio;
-
-  constructor() { 
-    this.departamentos = [
-      { name: 'Australia', code: 'AU' },
-      { name: 'Brazil', code: 'BR' },
-      { name: 'China', code: 'CN' },
-      { name: 'Egypt', code: 'EG' },
-      { name: 'France', code: 'FR' },
-      { name: 'Germany', code: 'DE' },
-      { name: 'India', code: 'IN' },
-      { name: 'Japan', code: 'JP' },
-      { name: 'Spain', code: 'ES' },
-      { name: 'United States', code: 'US' }
-    ];
-
-    this.municipios = [
-      { name: 'Managua', code: 'AU' },
-      { name: 'Tipitapa', code: 'BR' },
-      { name: 'Ciudad Sandino', code: 'CN' },
-      { name: 'Egypt', code: 'EG' },
-      { name: 'France', code: 'FR' },
-      { name: 'Germany', code: 'DE' },
-      { name: 'India', code: 'IN' },
-      { name: 'Japan', code: 'JP' },
-      { name: 'Spain', code: 'ES' },
-      { name: 'United States', code: 'US' }
-    ];
-  }
+  constructor( private mercantilReportService:MercantilReportService) { }
 
   periodo: any[] = [
     { name: 'Diario', key: 'D' },
@@ -61,19 +32,21 @@ export class FiltersComponent implements OnInit {
     { name: 'Rango', key:'R'}
   ];
 
-  ngOnInit(): void {
+  ngOnInit(): void {   
+    
     this.formGroup = new FormGroup({
-      selectedCategory: new FormControl()      
+      selectedFrecuencia:new FormControl<boolean|null>(null)
     });
+
+    this.mercantilReportService.ObtenerCatalogos().subscribe(data => {
+        this.listaDepartamentos = data.Departamentos;
+        this.listaMunicipios = data.Municipios;  
+      });
+    
   }
-}
 
-interface Departamento{
-  name:string,
-  code:string
-}
-
-interface Municipio{
-  name:string,
-  code:string
+  onSelect(selectedDep: IDepartamento):void{
+    this.Municipios = this.listaMunicipios.filter((item:any) => item.IdDepartamento == selectedDep.IdDepartamento);    
+  };
+  
 }

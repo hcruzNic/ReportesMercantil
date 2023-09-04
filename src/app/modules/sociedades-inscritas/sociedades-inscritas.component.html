@@ -1,3 +1,10 @@
 <div class="card">
   <app-filters></app-filters>
+  <div class="grid my-2">
+    <div class="card flex align-items-center gap-2 flex-wrap my-2">
+      <p-chip label="Ultima sincronizacion: {{miData.FechaEjecucion_Date | date:'dd/MM/yyyy, h:mm:ss'}}" icon="pi pi-info-circle"></p-chip>    
+    </div>
+  </div>  
+  <app-kpi-cards [dataSincronizacion]="miData"></app-kpi-cards>
+  <app-graficas></app-graficas>
 </div>

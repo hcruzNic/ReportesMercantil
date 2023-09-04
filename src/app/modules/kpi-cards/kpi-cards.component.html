@@ -1,0 +1,22 @@
+<div class="grid my-2">
+    <div class="kpi-card blue">
+        <span class="card-value">{{dataSincronizacion.CantidadSociedades | thousandsPipe}}</span>      
+        <span class="card-text">Total Sociedades Inscritas</span>
+        <i class="pi pi-book icon"></i>
+    </div>      
+    <div class="kpi-card purple">
+        <span class="card-value">{{dataSincronizacion.ConDeclaracionBF | thousandsPipe}}</span>
+        <span class="card-text">Total Declaración BF</span>
+        <i class="pi pi-book icon"></i>
+    </div>
+    <div class="kpi-card red">
+        <span class="card-value">{{dataSincronizacion.ConDeclaracionVigente | thousandsPipe}}</span>
+        <span class="card-text">Total Declaraciones Vigentes</span>
+        <i class="pi pi-book icon"></i>
+    </div>    
+    <div class="kpi-card grey-dark">
+        <span class="card-value">00,000 </span>
+        <span class="card-text">Total Sales</span>
+        <i class="pi pi-book icon"></i>
+    </div> 
+  </div>

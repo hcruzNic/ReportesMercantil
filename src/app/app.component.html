@@ -1,11 +1,11 @@
-<div class="grid mt-6 mx-8">
-  <div class="col-1">
+<div class="grid mt-6 mx-8 mb-8 flex-nowrap">
+  <div class="p-menu-custom">
     <app-menu></app-menu>
   </div>
-  <div class="col-fixed ml-5" style="width:50px">
+  <div class="col-fixed ml-5">
     <p-divider layout="vertical"></p-divider>
   </div>
-  <div class="col-10">
-    <app-sociedades-inscritas></app-sociedades-inscritas>
+  <div class="empty-contianer">
+    <router-outlet></router-outlet>   
   </div>
 </div>
