@@ -1,4 +1,4 @@
-<div class="grid my-4">
+<!--<div class="grid my-4">
     
         <div class="sm:col-12 xl:col-6">
             <p-panel header="Sociedades Mercantiles por Estado">
@@ -44,5 +44,103 @@
             </p-panel>
         </div>
     
+</div>-->
+
+<div class="block">
+    <div class="grid">
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Estado</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Estado</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div *ngIf="false; else showPie"> <!--Recordar cambiar el falor del *ngIf por la logica-->
+                                <div style="text-align: center; padding: 70px;">No hay datos</div>
+                            </div>
+                            <ng-template #showPie>
+                                <app-pie-mercantil></app-pie-mercantil>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Tipo</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Actividad Comercial</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Departamento</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sm:col-12 xl:col-6">
+            <div class="p-panel p-component">
+                <div class="p-panel-header">
+                    <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Municipio</span>
+                    <div class="p-panel-icons"></div>
+                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                    <div class="p-panel-content">
+                        <div class="justify-content-center">
+                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 

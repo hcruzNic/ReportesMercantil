@@ -29,6 +29,7 @@ import { ThousandsPipePipe } from './pipes/thousands-pipe.pipe';
 import { PieMercantilComponent } from './graphicsGroup/pie-mercantil/pie-mercantil.component';
 import { DoughnutMercantilComponent } from './graphicsGroup/doughnut-mercantil/doughnut-mercantil.component';
 import { PieActividadComercialComponent } from './graphicsGroup/pie-actividad-comercial/pie-actividad-comercial.component';
+import { CalendarModule } from "primeng/calendar";
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { PieActividadComercialComponent } from './graphicsGroup/pie-actividad-co
     ChipModule,
     ChartModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule, 
+    CalendarModule
   ],
   providers: [MercantilReportService],
   bootstrap: [AppComponent]

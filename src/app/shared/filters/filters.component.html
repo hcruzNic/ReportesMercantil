@@ -1,59 +1,96 @@
 <div class="grid">
-    <p-panel header="Parametros" class="col-12">
-      <form class="flex flex-column" [formGroup]="formGroup">
-        <div class="grid">
-          <div class="col-6">
-            <p-fieldset legend="Frecuencia" class="col-12">
-              <div *ngFor="let category of periodo" class="field-checkbox">
-                <p-radioButton [inputId]="category.key" [value]="category" formControlName="selectedFrecuencia"></p-radioButton>
+  <p-panel header="Parametros" class="col-12">
+    <form class="flex flex-column" [formGroup]="formGroup">
+      <div class="grid">
+        <div class="col-6">
+          <p-fieldset legend="Frecuencia" class="col-12">
+
+            <div *ngFor="let category of periodo">
+              <div class="field-checkbox">
+                <p-radioButton [inputId]="category.key" [value]="category.key"
+                formControlName="selectedFrecuencia"></p-radioButton>
                 <label [for]="category.key" class="ml-2">{{ category.name }}</label>
               </div>
-            </p-fieldset> 
-          </div>
-          <div class="col-6">
-            <p-fieldset legend="Ubicación" class="col-12">
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="card-container ">
-                          <div class="flex flex-column card-container">
-                            <div class="flex align-items-center justify-content-center h-2rem m-0"><p>Departamento</p></div>                        
-                            <div class="flex align-items-center justify-content-center h-4rem m-0">
-                                <p-dropdown class="absolute align-items-center" 
-                                  [options]="listaDepartamentos"                                  
-                                  [(ngModel)]="selectedDepartamento"                                  
-                                  optionLabel="Departamento"
-                                  placeholder="Todos"
-                                  (onChange)="onSelect($event.value)"                                  
-                                ></p-dropdown>
-                            </div>                        
-                          </div>
-                        </div>                            
-                    </div>                    
-                    <div class="col-6">
-                      <div class="card-container">
-                        <div class="flex flex-column card-container">                            
-                            <div class="flex align-items-center justify-content-center h-2rem m-0"><p>Municipio</p> </div>                    
-                            <div class="flex align-items-center justify-content-center h-4rem m-0">
-                                <p-dropdown class="absolute align-items-center" 
-                                  [options]="Municipios"
-                                  [(ngModel)]="selectedMunicipio"
-                                  optionLabel="Municipio"
-                                  placeholder="Todos"                                  
-                                ></p-dropdown>
-                            </div>                          
-                        </div>
+
+                <div *ngIf="showCalendarDiario && category.key == 'D'" class="col-12 calendar-container">
+                  <!-- Calendario para Diario -->
+                  <p-calendar id="fecha"  dateFormat="dd/mm/yy"></p-calendar>
+                  <br>
+                </div>
+
+                <div *ngIf="showCalendarMes && category.key == 'M'" class="col-12 calendar-container">
+                  <!-- Calendario para Mensual -->
+                  <p-calendar id="mes"  view="month" dateFormat="mm/yy"
+                    [readonlyInput]="true"></p-calendar>
+                </div>
+
+                <div *ngIf="showCalendarTrim && category.key == 'T'" class="col-12 calendar-container">
+                  <p-calendar id="trimestre"  selectionMode="range" view="month"
+                    [readonlyInput]="true" (onSelect)="onDateSelect($event)" dateFormat="dd/mm/yy"></p-calendar>
+                </div>
+
+                <div *ngIf="showCalendarSem && category.key == 'S'" class="col-12 calendar-container">
+                  <p-calendar id="trimestre"  selectionMode="range" view="month"
+                    [readonlyInput]="true" (onSelect)="onDateSelect($event)" dateFormat="dd/mm/yy"></p-calendar>
+                </div>
+
+                <div *ngIf="showCalendarAnual && category.key == 'A'" class="col-12 calendar-container">
+                  <p-calendar view="year" dateFormat="yy" [yearNavigator]="true" yearRange="2000:2030" [readonlyInput]="true"></p-calendar>
+                </div>
+
+                <div *ngIf="showCalendarRange && category.key == 'R'" class="col-12 calendar-container">                  
+                  <p-calendar id="range" selectionMode="range" [readonlyInput]="true" inputId="range" dateFormat="dd/mm/yy">                    
+                  </p-calendar>
+              </div>
+
+
+            </div>     
+            
+          </p-fieldset>
+        </div>
+        <div class="col-6">
+          <p-fieldset legend="Ubicación" class="col-12">
+            <div class="grid">
+              <div class="col-6">
+                <div class="card-container ">
+                  <div class="flex flex-column card-container">
+                    <div class="flex align-items-center justify-content-center h-2rem m-0">
+                      <p>Departamento</p>
                     </div>
-                  </div> 
-                </div>          
-            </p-fieldset> 
-          </div>
+                    <div class="flex align-items-center justify-content-center h-4rem m-0">
+                      <p-dropdown class="absolute align-items-center" [options]="listaDepartamentos"
+                      formControlName="selectedDepartamento" optionLabel="Departamento" placeholder="Todos"
+                        (onChange)="onSelect($event.value)"></p-dropdown>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card-container">
+                  <div class="flex flex-column card-container">
+                    <div class="flex align-items-center justify-content-center h-2rem m-0">
+                      <p>Municipio</p>
+                    </div>
+                    <div class="flex align-items-center justify-content-center h-4rem m-0">
+                      <p-dropdown class="absolute align-items-center" [options]="Municipios"
+                      formControlName="selectedMunicipio" optionLabel="Municipio" placeholder="Todos"></p-dropdown>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </p-fieldset>
         </div>
-        <div class="grid">
-          <div class="flex flex-wrap align-items-center justify-content-center card-container">
-            <p-button class="px-2 m-2" label="Limpiar parámetros" styleClass="p-button-raised p-button-secondary border-noround"></p-button>
-            <p-button class="px-2 m-2" label="Mostrar datos" styleClass="p-button-raised p-button-secondary border-noround"></p-button>
-          </div>
+      </div>
+      <div class="grid">
+        <div class="flex flex-wrap align-items-center justify-content-center card-container">
+          <p-button class="px-2 m-2" label="Limpiar parámetros"
+            styleClass="p-button-raised p-button-secondary border-noround"></p-button>
+          <p-button class="px-2 m-2" label="Mostrar datos"
+            styleClass="p-button-raised p-button-secondary border-noround"></p-button>
         </div>
-      </form>
+      </div>
+
+    </form>
   </p-panel>
-  </div>
+</div>
