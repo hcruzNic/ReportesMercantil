@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MercantilReportService } from 'src/app/services/mercantil-report.service';
 import { IDepartamento,IMunicipio} from 'src/app/Interfaces/ICatalogos'
 import { Calendar } from "primeng/calendar";
+import { endWith } from 'rxjs';
 
 
 
@@ -53,6 +54,8 @@ export class FiltersComponent implements OnInit {
       selectedFrecuencia : new FormControl<string|null>(null),
       selectedDepartamento: new FormControl<IDepartamento>(this.selectedDepartamento),
       selectedMunicipio: new FormControl<IMunicipio>(this.selectedMunicipio),
+      date: new FormControl<Date>(new Date()),
+      rangeDates: new FormControl<Date[] | undefined>([new Date(), new Date()]),
     });
 
     this.mercantilReportService.ObtenerCatalogos().subscribe(data => {
@@ -63,16 +66,19 @@ export class FiltersComponent implements OnInit {
       this.formGroup.get('selectedFrecuencia')?.valueChanges.subscribe((value) => {       
 
         if (value === 'D') {
+          this.formGroup.get('date')?.setValue(new Date());
           this.showCalendarForDiario();
         } else if (value === 'M') {
+          this.formGroup.get('date')?.setValue(new Date());
           this.showCalendarForMes();
-        } else if (value === 'T') {
+        } else if (value === 'T') {         
           this.showCalendarForTrim();
-        } else if (value == 'S') {
+        } else if (value == 'S') {          
           this.showCalendarForSem();
         } else if(value == 'A'){
+          this.formGroup.get('date')?.setValue(new Date());
           this.showCalendarForAnual();
-        } else if(value == 'R'){
+        } else if(value == 'R'){          
           this.showCalendarForRange();
         }
       });
@@ -84,16 +90,7 @@ export class FiltersComponent implements OnInit {
   };
 
   onDateSelect(event:any){
-    if (this.rangeDates && this.rangeDates.length > 1) {
-      const diffMonths = Math.abs(this.rangeDates[0].getMonth() - this.rangeDates[1].getMonth());
-
-      if (diffMonths > 2) {
-        this.rangeDates.pop();
-      }else if (this.rangeDates.length == 2) {
-        const lastDate = new Date(this.rangeDates[1].getFullYear(), this.rangeDates[1].getMonth()+1,0);
-        this.rangeDates[1] = lastDate;
-      } 
-    }
+    
   }
   
   showCalendarForDiario() {
@@ -121,6 +118,19 @@ export class FiltersComponent implements OnInit {
     this.showCalendarSem = false;
     this.showCalendarAnual = false;
     this.showCalendarRange = false;
+    this.rangeDates = undefined;
+
+    if (!this.rangeDates) {
+      const startDate = new Date();
+      const endDate = new Date(startDate);
+      
+      endDate.setMonth(startDate.getMonth() + 3);
+
+      this.rangeDates = [startDate,endDate];
+      this.formGroup.get('rangeDates')?.setValue(this.rangeDates);
+    }
+
+
   }
 
   showCalendarForSem(){
@@ -130,6 +140,17 @@ export class FiltersComponent implements OnInit {
     this.showCalendarSem = true;
     this.showCalendarAnual = false;
     this.showCalendarRange = false;
+    this.rangeDates = undefined;
+
+    if (!this.rangeDates) {
+      const startDate = new Date();
+      const endDate = new Date(startDate);
+      
+      endDate.setMonth(startDate.getMonth() + 5);
+
+      this.rangeDates = [startDate,endDate];
+      this.formGroup.get('rangeDates')?.setValue(this.rangeDates);
+    }
   }
   showCalendarForAnual(){
     this.showCalendarDiario = false;
@@ -147,6 +168,15 @@ export class FiltersComponent implements OnInit {
     this.showCalendarSem = false;
     this.showCalendarAnual = false;
     this.showCalendarRange = true;
+    this.rangeDates = undefined;
+
+    if (!this.rangeDates) {
+      const startDate = new Date();
+      const endDate = new Date(startDate);      
+      //endDate.setMonth(startDate.getMonth() + 5);
+      this.rangeDates = [startDate,endDate];
+      this.formGroup.get('rangeDates')?.setValue(this.rangeDates);
+    }
   }
 
 }

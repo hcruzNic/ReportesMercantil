@@ -14,35 +14,34 @@
 
                 <div *ngIf="showCalendarDiario && category.key == 'D'" class="col-12 calendar-container">
                   <!-- Calendario para Diario -->
-                  <p-calendar id="fecha"  dateFormat="dd/mm/yy"></p-calendar>
+                  <p-calendar id="fecha"  dateFormat="dd/mm/yy" formControlName="date"></p-calendar>
                   <br>
                 </div>
 
                 <div *ngIf="showCalendarMes && category.key == 'M'" class="col-12 calendar-container">
                   <!-- Calendario para Mensual -->
                   <p-calendar id="mes"  view="month" dateFormat="mm/yy"
-                    [readonlyInput]="true"></p-calendar>
+                    [readonlyInput]="true" formControlName="date"></p-calendar>
                 </div>
 
                 <div *ngIf="showCalendarTrim && category.key == 'T'" class="col-12 calendar-container">
-                  <p-calendar id="trimestre"  selectionMode="range" view="month"
-                    [readonlyInput]="true" (onSelect)="onDateSelect($event)" dateFormat="dd/mm/yy"></p-calendar>
+                  <p-calendar id="trimestre"  view="month" selectionMode="range" 
+                    [readonlyInput]="true" [inputId]="category.key" formControlName="rangeDates" dateFormat="mm/yy" (onSelect)="onDateSelect($event)"></p-calendar>
                 </div>
 
                 <div *ngIf="showCalendarSem && category.key == 'S'" class="col-12 calendar-container">
                   <p-calendar id="trimestre"  selectionMode="range" view="month"
-                    [readonlyInput]="true" (onSelect)="onDateSelect($event)" dateFormat="dd/mm/yy"></p-calendar>
+                    [readonlyInput]="true" [inputId]="category.key" formControlName="rangeDates" dateFormat="mm/yy" (onSelect)="onDateSelect($event)"></p-calendar>
                 </div>
 
                 <div *ngIf="showCalendarAnual && category.key == 'A'" class="col-12 calendar-container">
-                  <p-calendar view="year" dateFormat="yy" [yearNavigator]="true" yearRange="2000:2030" [readonlyInput]="true"></p-calendar>
+                  <p-calendar view="year" dateFormat="yy" [yearNavigator]="true" yearRange="2000:2030" [readonlyInput]="true" formControlName="date"></p-calendar>
                 </div>
 
                 <div *ngIf="showCalendarRange && category.key == 'R'" class="col-12 calendar-container">                  
-                  <p-calendar id="range" selectionMode="range" [readonlyInput]="true" inputId="range" dateFormat="dd/mm/yy">                    
+                  <p-calendar id="range" selectionMode="range" [readonlyInput]="true" inputId="range" dateFormat="dd/mm/yy" formControlName="rangeDates">                    
                   </p-calendar>
               </div>
-
 
             </div>     
             
