@@ -48,7 +48,7 @@
 
 <div class="block">
     <div class="grid">
-        <div class="sm:col-12 xl:col-6">
+        <!--<div class="sm:col-12 xl:col-6">
             <div class="p-panel p-component">
                 <div class="p-panel-header">
                     <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Estado</span>
@@ -61,18 +61,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="sm:col-12 xl:col-6">
             <div class="p-panel p-component">
                 <div class="p-panel-header">
                     <span class="p-panel-title" id="pr_id_6_header">Sociedades Mercantiles por Estado</span>
                     <div class="p-panel-icons"></div>
-                </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
+                </div>
+                <div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
                     <div class="p-panel-content">
                         <div class="justify-content-center">
-                            <div *ngIf="false; else showPie"> <!--Recordar cambiar el falor del *ngIf por la logica-->
+                            <ng-container *ngIf="!hasData; else showPie">
                                 <div style="text-align: center; padding: 70px;">No hay datos</div>
-                            </div>
+                            </ng-container>
                             <ng-template #showPie>
                                 <app-pie-mercantil></app-pie-mercantil>
                             </ng-template>

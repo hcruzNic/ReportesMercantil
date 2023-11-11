@@ -30,6 +30,7 @@ import { PieMercantilComponent } from './graphicsGroup/pie-mercantil/pie-mercant
 import { DoughnutMercantilComponent } from './graphicsGroup/doughnut-mercantil/doughnut-mercantil.component';
 import { PieActividadComercialComponent } from './graphicsGroup/pie-actividad-comercial/pie-actividad-comercial.component';
 import { CalendarModule } from "primeng/calendar";
+import { SharedDataService } from "src/app/services/shared-data.service";
 
 
 @NgModule({
@@ -67,7 +68,7 @@ import { CalendarModule } from "primeng/calendar";
     AppRoutingModule, 
     CalendarModule
   ],
-  providers: [MercantilReportService],
+  providers: [MercantilReportService,SharedDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

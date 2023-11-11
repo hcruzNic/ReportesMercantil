@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedDataService } from "src/app/services/shared-data.service";
 
 
 @Component({
@@ -8,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GraficasComponent implements OnInit { 
 
-  constructor() { }
+  hasData: boolean = false;
+
+  constructor(private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void { 
+    this.sharedDataService.hasData$.subscribe((hasData) => {
+      this.hasData = hasData;
+    });
   }
 
 }

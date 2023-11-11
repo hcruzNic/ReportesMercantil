@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MercantilReportService } from 'src/app/services/mercantil-report.service';
 import { IDepartamento,IMunicipio} from 'src/app/Interfaces/ICatalogos'
+import { IParametroReporte } from "src/app/Interfaces/IParametro-reporte";
+import { PieMercantilComponent } from "src/app/graphicsGroup/pie-mercantil/pie-mercantil.component";
+import { SharedDataService } from "src/app/services/shared-data.service";
+import { Observable } from "rxjs";
 import { Calendar } from "primeng/calendar";
 import { endWith } from 'rxjs';
 
@@ -14,12 +18,17 @@ import { endWith } from 'rxjs';
 })
 export class FiltersComponent implements OnInit {
 
+  @ViewChild(PieMercantilComponent, { static: false })
+  private pieMercantilComponent!: PieMercantilComponent;
+
   showCalendarDiario: boolean = false;
   showCalendarMes: boolean = false;
   showCalendarTrim:boolean = false;
   showCalendarSem:boolean = false;
   showCalendarAnual:boolean = false;
   showCalendarRange : boolean = false;
+  sociedadEstadoData:any[] | undefined;
+  hasData: boolean = false;
 
 
   date:Date | undefined;
@@ -35,7 +44,7 @@ export class FiltersComponent implements OnInit {
   formGroup!: FormGroup;
 
 
-  constructor( private mercantilReportService:MercantilReportService) { }
+  constructor( private mercantilReportService:MercantilReportService, private sharedDataService:SharedDataService) { }
 
   periodo: any[] = [
     { name: 'Diario', key: 'D' },
@@ -46,7 +55,7 @@ export class FiltersComponent implements OnInit {
     { name: 'Rango', key:'R'}
   ];
 
-  ngOnInit(): void {   
+  ngOnInit(): void {       
 
     this.date = new Date();    
     
@@ -64,29 +73,94 @@ export class FiltersComponent implements OnInit {
       });
 
       this.formGroup.get('selectedFrecuencia')?.valueChanges.subscribe((value) => {       
+        this.handleFrecuenciaChange(value);        
+      });   
+  }
 
-        if (value === 'D') {
-          this.formGroup.get('date')?.setValue(new Date());
-          this.showCalendarForDiario();
-        } else if (value === 'M') {
-          this.formGroup.get('date')?.setValue(new Date());
-          this.showCalendarForMes();
-        } else if (value === 'T') {         
-          this.showCalendarForTrim();
-        } else if (value == 'S') {          
-          this.showCalendarForSem();
-        } else if(value == 'A'){
-          this.formGroup.get('date')?.setValue(new Date());
-          this.showCalendarForAnual();
-        } else if(value == 'R'){          
-          this.showCalendarForRange();
-        }
-      });
+  handleFrecuenciaChange(value: string): void {
+    if (value === 'D') {
+      this.formGroup.get('date')?.setValue(new Date());
+      this.showCalendarForDiario();
+      this.callSociedadesInscritas();
+    } else if (value === 'M') {
+      this.formGroup.get('date')?.setValue(new Date());
+      this.showCalendarForMes();
+    } else if (value === 'T') {         
+      this.showCalendarForTrim();
+    } else if (value == 'S') {          
+      this.showCalendarForSem();
+    } else if(value == 'A'){
+      this.formGroup.get('date')?.setValue(new Date());
+      this.showCalendarForAnual();
+    } else if(value == 'R'){          
+      this.showCalendarForRange();
+    }
+  }
+
+  callSociedadesInscritas(){
+
+    type MapeoFrecuencia = {
+      [key: string]: string;
+    };
+    
+    const mapeoFrecuencia:MapeoFrecuencia = {
+      'D': '1',
+      'M': '2',
+      'T': '3',
+      'S': '4',
+      'A': '5',
+      'R': '6'
+    };
+
+    const selectedFrecuencia = this.formGroup.get('selectedFrecuencia')?.value;
+    const frecuenciaValue = selectedFrecuencia in mapeoFrecuencia ? mapeoFrecuencia[selectedFrecuencia]:0;
+
+    const parametros:IParametroReporte = {      
+        frecuencia:{value:<number>(frecuenciaValue)},
+        ubicacion:{
+              departamento:this.selectedDepartamento.IdDepartamento || 0,              
+              municipio:this.selectedMunicipio.IdMunicipio || 0},
+        fechas:{fecha_1:1699375322856, fecha_2:1699375322856},        
+        pagina:0      
+    }
+
+    if (!this.sociedadEstadoData /*&& this.pieMercantilComponent*/) {
+
+      this.mercantilReportService.SociedadesInscritasPaginadas(parametros).subscribe(
+        (data: any) => {
+          console.log(data);
+          
+          this.sociedadEstadoData = undefined;
+          const countByEstado = this.getCountByEstado(data);
+
+          this.sharedDataService.setCountByEstado(countByEstado);
+
+          this.hasData = data.length > 0;
+          this.sharedDataService.setHasData(this.hasData);
+        }     
+      )      
+    }
     
   }
 
+  getCountByEstado(data:any[]):{[estado:string]:number}{
+    const countByEstado:{[estado:string]:number} = {};
+
+    data.forEach((sociedad:any) => {
+      const estado = sociedad.EstadoSociedad || 'No definido';
+      countByEstado[estado] = (countByEstado[estado] || 0) + 1;
+    });
+
+    return countByEstado;
+  }
+
+
+  
+
   onSelect(selectedDep: IDepartamento):void{
-    this.Municipios = this.listaMunicipios.filter((item:any) => item.IdDepartamento == selectedDep.IdDepartamento);    
+    this.Municipios = this.listaMunicipios.filter((item:any) => item.IdDepartamento == selectedDep.IdDepartamento);  
+    this.selectedDepartamento = {IdDepartamento:selectedDep.IdDepartamento, Departamento:selectedDep.Departamento};  
+    this.callSociedadesInscritas();
   };
 
   onDateSelect(event:any){

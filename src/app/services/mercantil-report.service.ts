@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { IDepartamento,IMunicipio } from "src/app/Interfaces/ICatalogos";
+import { IParametroReporte } from "src/app/Interfaces/IParametro-reporte";
 
 
 @Injectable({
@@ -24,10 +25,7 @@ export class MercantilReportService {
     if(this.host[0] === 'localhost'){
 
       this.localser = true;
-      this.cadena = 'http://localhost:62750/';//location.host;
-
-      /************** AMBIENTE DESARROLLO *********************************/
-      //this.urlServicioCatalogo = 'http://serviciosdesarrollo.registropublico.gob.ni' + '/api/CatalogoReporte/'
+      this.cadena = 'http://localhost:62750';//location.host;     
       
        /************** AMBIENTE PREPRODUCCION *********************************/
       //this.urlServicioCatalogo = 'https://siicarpreproduccion.registropublico.gob.ni'+'/api/CatalogoReporte/'
@@ -39,7 +37,12 @@ export class MercantilReportService {
         //this.urlServicioCatalogo = 'https://srv-siicar-app.registropublico.gob.ni/'+'/api/CatalogoReporte/'
 
         this.urlServicioCatalogo = this.cadena + '/api/CatalogoReporte/'
-    }
+
+    }else if (this.host[0] === 'siicardesarrollo.registropublico.gob.ni') {
+        /************** AMBIENTE DESARROLLO *********************************/
+        this.cadena = 'http://serviciosdesarrollo.registropublico.gob.ni';//location.host;  
+        this.urlServicioCatalogo =  this.cadena+ '/api/CatalogoReporte/'
+    } 
   }
 
     public ObtenerCatalogos():Observable<any>{
@@ -50,6 +53,11 @@ export class MercantilReportService {
     public ObtenerSincronizacionActiva(codigoInternoTipoSinc:string):Observable<any>{
       const url = 'http://localhost:62750/api/ReporteMercantil/'+ 'ObtenerSincronizacionActiva?codigo_tipoSincronizacion=' + codigoInternoTipoSinc;
       return this.http.get(url,{responseType:'json'})
+    }
+
+    public SociedadesInscritasPaginadas(parametros:IParametroReporte):Observable<any>{      
+      const url = 'http://localhost:62750/api/ReporteMercantil/SociedadesInscritasPaginadas'         
+      return this.http.post(url,parametros,{responseType:'json'});
     }
 
     cambiarEstadoSinContenido(nuevoEstado: boolean):boolean {
