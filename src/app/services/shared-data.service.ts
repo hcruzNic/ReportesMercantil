@@ -85,4 +85,22 @@ export class SharedDataService {
     return this.countByDepartamento$.asObservable();
   }
 
+  /* A partir de acá inician los metodos para el grófico de pastel Municipios*/
+
+  private countByMunicipio:{[municipio:string]:number} = {};
+  private countByMunicipio$ = new BehaviorSubject<{[municipio:string]:number}>({});
+
+  setCountByMunicipio(data:{[municipio:string]:number}):void{
+    this.countByMunicipio = data;
+    this.countByMunicipio$.next(data);
+  }
+
+  getCountByMunicipio():{[municipio:string]:number}{
+    return this.countByMunicipio;
+  }
+
+  getCountByMunicipio$():Observable<{[municipio:string]:number}>{
+    return this.countByMunicipio$.asObservable();
+  }
+
 }

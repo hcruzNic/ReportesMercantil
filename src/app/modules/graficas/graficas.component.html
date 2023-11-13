@@ -84,7 +84,12 @@
                 </div><div class="p-toggleable-content" aria-hidden="false" role="region" id="pr_id_6_content" aria-labelledby="pr_id_6_header">
                     <div class="p-panel-content">
                         <div class="justify-content-center">
-                            <div style="text-align: center; padding: 70px;">No hay datos</div>
+                            <ng-container *ngIf="!hasData; else showPieMunicipio">
+                                <div style="text-align: center; padding: 70px;">No hay datos</div>
+                            </ng-container>
+                            <ng-template #showPieMunicipio>
+                                <app-pie-municipios></app-pie-municipios>
+                            </ng-template>
                         </div>
                     </div>
                 </div>

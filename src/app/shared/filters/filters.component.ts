@@ -139,11 +139,14 @@ export class FiltersComponent implements OnInit {
 
             const countByEstado = this.getCountByEstado(data);
             const countByTipoSociedad = this.getCountByTipoSociedad(data); 
-            const countByDepartamento = this.getCountByDepartamento(data);         
+            const countByDepartamento = this.getCountByDepartamento(data);  
+            const countByMunicipio = this.getCountByMunicipio(data);       
 
             this.sharedDataService.setCountByEstado(countByEstado);
             this.sharedDataService.setCountByTipoSociedad(countByTipoSociedad);   
-            this.sharedDataService.setCountByDepartamento(countByDepartamento);       
+            this.sharedDataService.setCountByDepartamento(countByDepartamento);  
+            this.sharedDataService.setCountByMunicipio(countByMunicipio);
+
             }     
           )      
       }    
@@ -185,6 +188,17 @@ export class FiltersComponent implements OnInit {
     });
 
     return countByDepartamento;
+  }
+
+  getCountByMunicipio(data: any[]): { [municipio: string]: number } {
+    const countByMunicipio: { [municipio: string]: number } = {};
+
+    data.forEach((sociedad: any) => {
+      const municipio = sociedad.Municipio || 'No definido';
+      countByMunicipio[municipio] = (countByMunicipio[municipio] || 0) + 1;
+    });
+
+    return countByMunicipio;
   }
 
 
