@@ -68,4 +68,21 @@ export class SharedDataService {
     return this.countByTipoSociedad$.asObservable();
   }
 
+  /* A partir de acá inician los metodos para el grófico de pastel Departamentos*/
+  private countByDepartamento:{[departamento:string]:number} = {};
+  private countByDepartamento$ = new BehaviorSubject<{[departamento:string]:number}>({});
+
+  setCountByDepartamento(data:{[departamento:string]:number}):void{
+    this.countByDepartamento = data;
+    this.countByDepartamento$.next(data);
+  }
+
+  getCountByDepartamento():{[departamento:string]:number}{
+    return this.countByDepartamento;
+  }
+
+  getCountByDepartamento$():Observable<{[departamento:string]:number}>{
+    return this.countByDepartamento$.asObservable();
+  }
+
 }

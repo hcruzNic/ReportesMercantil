@@ -31,6 +31,7 @@ import { DoughnutMercantilComponent } from './graphicsGroup/doughnut-mercantil/d
 import { PieActividadComercialComponent } from './graphicsGroup/pie-actividad-comercial/pie-actividad-comercial.component';
 import { CalendarModule } from "primeng/calendar";
 import { SharedDataService } from "src/app/services/shared-data.service";
+import { PieDepartamentosComponent } from './graphicsGroup/pie-departamentos/pie-departamentos.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { SharedDataService } from "src/app/services/shared-data.service";
     ThousandsPipePipe,
     PieMercantilComponent,
     DoughnutMercantilComponent,
-    PieActividadComercialComponent
+    PieActividadComercialComponent,
+    PieDepartamentosComponent
   ],
   imports: [
     BrowserModule,

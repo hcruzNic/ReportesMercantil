@@ -37,8 +37,38 @@ export class DoughnutMercantilComponent implements OnInit {
             datasets: [
                 {
                     data: data,
-                    backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500'), documentStyle.getPropertyValue('--green-500')],
-                    hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
+                    backgroundColor: [  documentStyle.getPropertyValue('--blue-500'), 
+                                        documentStyle.getPropertyValue('--yellow-500'), 
+                                        documentStyle.getPropertyValue('--green-500'),
+                                        documentStyle.getPropertyValue('--purple-500'),
+                                        documentStyle.getPropertyValue('--cyan-500'),
+                                        documentStyle.getPropertyValue('--orange-500'),
+                                        documentStyle.getPropertyValue('--magenta-500'),
+                                        documentStyle.getPropertyValue('--red-500:'),
+                                        documentStyle.getPropertyValue('--teal-500'),
+                                        documentStyle.getPropertyValue('--lime-500'),
+                                        documentStyle.getPropertyValue('--pink-500'),
+                                        documentStyle.getPropertyValue('--amber-500'),
+                                        documentStyle.getPropertyValue('--indigo-500'),
+                                        documentStyle.getPropertyValue('--brown-500'),
+                                        documentStyle.getPropertyValue('--grey-500')
+                                    ],
+                    hoverBackgroundColor: [ documentStyle.getPropertyValue('--blue-400'), 
+                                            documentStyle.getPropertyValue('--yellow-400'), 
+                                            documentStyle.getPropertyValue('--green-400'),
+                                            documentStyle.getPropertyValue('--purple-400'),
+                                            documentStyle.getPropertyValue('--cyan-400'),
+                                            documentStyle.getPropertyValue('--orange-400'),
+                                            documentStyle.getPropertyValue('--magenta-400'),
+                                            documentStyle.getPropertyValue('--red-400:'),
+                                            documentStyle.getPropertyValue('--teal-400'),
+                                            documentStyle.getPropertyValue('--lime-400'),
+                                            documentStyle.getPropertyValue('--pink-400'),
+                                            documentStyle.getPropertyValue('--amber-400'),
+                                            documentStyle.getPropertyValue('--indigo-400'),
+                                            documentStyle.getPropertyValue('--brown-400'),
+                                            documentStyle.getPropertyValue('--grey-400')
+                                        ]
                 }
             ]
         };
