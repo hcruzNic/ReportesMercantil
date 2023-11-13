@@ -49,4 +49,23 @@ export class SharedDataService {
   getCountByEstado$(): Observable<ICountByEstado> {
     return this.countByEstado$.asObservable();
   }
+
+  /* A partir de acá inician los metodos para el grófico de anillo*/
+  
+  private countByTipoSociedad: { [tipoSociedad: string]: number } = {};
+  private countByTipoSociedad$ = new BehaviorSubject<{ [tipoSociedad: string]: number }>({});
+
+  setCountByTipoSociedad(data: { [tipoSociedad: string]: number }): void {
+    this.countByTipoSociedad = data;
+    this.countByTipoSociedad$.next(data);
+  }
+
+  getCountByTipoSociedad(): { [tipoSociedad: string]: number } {
+    return this.countByTipoSociedad;
+  }
+
+  getCountByTipoSociedad$(): Observable<{ [tipoSociedad: string]: number }> {
+    return this.countByTipoSociedad$.asObservable();
+  }
+
 }

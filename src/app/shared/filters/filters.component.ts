@@ -57,17 +57,17 @@ export class FiltersComponent implements OnInit {
 
   ngOnInit(): void {       
 
-    this.date = new Date();    
+      this.date = new Date();    
     
-    this.formGroup = new FormGroup({
-      selectedFrecuencia : new FormControl<string|null>(null),
-      selectedDepartamento: new FormControl<IDepartamento>(this.selectedDepartamento),
-      selectedMunicipio: new FormControl<IMunicipio>(this.selectedMunicipio),
-      date: new FormControl<Date>(new Date()),
-      rangeDates: new FormControl<Date[] | undefined>([new Date(), new Date()]),
-    });
+      this.formGroup = new FormGroup({
+        selectedFrecuencia : new FormControl<string|null>(null),
+        selectedDepartamento: new FormControl<IDepartamento>(this.selectedDepartamento),
+        selectedMunicipio: new FormControl<IMunicipio>(this.selectedMunicipio),
+        date: new FormControl<Date>(new Date()),
+        rangeDates: new FormControl<Date[] | undefined>([new Date(), new Date()]),
+      });
 
-    this.mercantilReportService.ObtenerCatalogos().subscribe(data => {
+      this.mercantilReportService.ObtenerCatalogos().subscribe(data => {
         this.listaDepartamentos = data.Departamentos;
         this.listaMunicipios = data.Municipios;  
       });
@@ -78,69 +78,73 @@ export class FiltersComponent implements OnInit {
   }
 
   handleFrecuenciaChange(value: string): void {
-    if (value === 'D') {
-      this.formGroup.get('date')?.setValue(new Date());
-      this.showCalendarForDiario();
-      this.callSociedadesInscritas();
-    } else if (value === 'M') {
-      this.formGroup.get('date')?.setValue(new Date());
-      this.showCalendarForMes();
-    } else if (value === 'T') {         
-      this.showCalendarForTrim();
-    } else if (value == 'S') {          
-      this.showCalendarForSem();
-    } else if(value == 'A'){
-      this.formGroup.get('date')?.setValue(new Date());
-      this.showCalendarForAnual();
-    } else if(value == 'R'){          
-      this.showCalendarForRange();
-    }
+      if (value === 'D') {
+        this.formGroup.get('date')?.setValue(new Date());
+        this.showCalendarForDiario();
+        this.callSociedadesInscritas();
+      } else if (value === 'M') {
+        this.formGroup.get('date')?.setValue(new Date());
+        this.showCalendarForMes();
+      } else if (value === 'T') {         
+        this.showCalendarForTrim();
+      } else if (value == 'S') {          
+        this.showCalendarForSem();
+      } else if(value == 'A'){
+        this.formGroup.get('date')?.setValue(new Date());
+        this.showCalendarForAnual();
+      } else if(value == 'R'){          
+        this.showCalendarForRange();
+      }
   }
 
   callSociedadesInscritas(){
 
-    type MapeoFrecuencia = {
-      [key: string]: string;
-    };
+      type MapeoFrecuencia = {
+        [key: string]: string;
+      };
     
-    const mapeoFrecuencia:MapeoFrecuencia = {
-      'D': '1',
-      'M': '2',
-      'T': '3',
-      'S': '4',
-      'A': '5',
-      'R': '6'
-    };
+      const mapeoFrecuencia:MapeoFrecuencia = {
+        'D': '1',
+        'M': '2',
+        'T': '3',
+        'S': '4',
+        'A': '5',
+        'R': '6'
+      };
 
-    const selectedFrecuencia = this.formGroup.get('selectedFrecuencia')?.value;
-    const frecuenciaValue = selectedFrecuencia in mapeoFrecuencia ? mapeoFrecuencia[selectedFrecuencia]:0;
+      const selectedFrecuencia = this.formGroup.get('selectedFrecuencia')?.value;
+      const frecuenciaValue = selectedFrecuencia in mapeoFrecuencia ? mapeoFrecuencia[selectedFrecuencia]:0;
 
-    const parametros:IParametroReporte = {      
-        frecuencia:{value:<number>(frecuenciaValue)},
-        ubicacion:{
-              departamento:this.selectedDepartamento.IdDepartamento || 0,              
-              municipio:this.selectedMunicipio.IdMunicipio || 0},
-        fechas:{fecha_1:1699375322856, fecha_2:1699375322856},        
-        pagina:0      
-    }
+      const parametros:IParametroReporte = {      
+          frecuencia:{value:<number>(frecuenciaValue)},
+          ubicacion:{
+                departamento:this.selectedDepartamento.IdDepartamento || 0,              
+                municipio:this.selectedMunicipio.IdMunicipio || 0},
+          fechas:{fecha_1:1699375322856, fecha_2:1699375322856},        
+          pagina:0      
+      }
 
-    if (!this.sociedadEstadoData /*&& this.pieMercantilComponent*/) {
+      if (!this.sociedadEstadoData) {
 
-      this.mercantilReportService.SociedadesInscritasPaginadas(parametros).subscribe(
-        (data: any) => {
-          console.log(data);
-          
-          this.sociedadEstadoData = undefined;
-          const countByEstado = this.getCountByEstado(data);
+          this.mercantilReportService.SociedadesInscritasPaginadas(parametros).subscribe(
+            (data: any) => { 
+            console.log(data);
 
-          this.sharedDataService.setCountByEstado(countByEstado);
+            this.hasData = data.length > 0;
+            this.sharedDataService.setHasData(this.hasData);
 
-          this.hasData = data.length > 0;
-          this.sharedDataService.setHasData(this.hasData);
-        }     
-      )      
-    }
-    
+            //this.sharedDataService.setCountByEstado({});
+            //this.sharedDataService.setCountByTipoSociedad({});          
+            this.sociedadEstadoData = undefined;
+
+            const countByEstado = this.getCountByEstado(data);
+            const countByTipoSociedad = this.getCountByTipoSociedad(data);          
+
+            this.sharedDataService.setCountByEstado(countByEstado);
+            this.sharedDataService.setCountByTipoSociedad(countByTipoSociedad);          
+            }     
+          )      
+      }    
   }
 
   getCountByEstado(data:any[]):{[estado:string]:number}{
@@ -152,6 +156,22 @@ export class FiltersComponent implements OnInit {
     });
 
     return countByEstado;
+  }
+
+  getCountByTipoSociedad(data: any[]): { [tipoSociedad: string]: number } {
+    const countByTipoSociedad: { [tipoSociedad: string]: number } = {};
+  
+    data.forEach((sociedad: any) => {
+      const tipoSociedad = sociedad.TipoSociedad;
+  
+      if (tipoSociedad in countByTipoSociedad) {
+        countByTipoSociedad[tipoSociedad]++;
+      } else {
+        countByTipoSociedad[tipoSociedad] = 1;
+      }
+    });
+  
+    return countByTipoSociedad;
   }
 
 

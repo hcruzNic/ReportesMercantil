@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-doughnut-mercantil',
@@ -7,22 +8,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DoughnutMercantilComponent implements OnInit {
 
-  constructor() { }
+  constructor(private sharedDataService: SharedDataService) { }
 
-  data: any;
-
+  data: any = {};
   options: any;
 
   ngOnInit(): void {
 
-    const documentStyle = getComputedStyle(document.documentElement);
+        this.sharedDataService.getCountByTipoSociedad$().subscribe((countByTipoSociedad) =>{
+            this.updateChartData([countByTipoSociedad]);
+            this.loadDefaultCharData();
+        });
+        
+  }
+
+    loadDefaultCharData():void{
+
+        const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
 
+        const countByTipoSociedad = this.sharedDataService.getCountByTipoSociedad();
+
+        const labels = Object.keys(countByTipoSociedad);
+        const data = Object.values(countByTipoSociedad);
+
         this.data = {
-            labels: ['A', 'B', 'C'],
+            labels: labels,
             datasets: [
                 {
-                    data: [300, 50, 100],
+                    data: data,
                     backgroundColor: [documentStyle.getPropertyValue('--blue-500'), documentStyle.getPropertyValue('--yellow-500'), documentStyle.getPropertyValue('--green-500')],
                     hoverBackgroundColor: [documentStyle.getPropertyValue('--blue-400'), documentStyle.getPropertyValue('--yellow-400'), documentStyle.getPropertyValue('--green-400')]
                 }
@@ -40,6 +54,31 @@ export class DoughnutMercantilComponent implements OnInit {
                 }
             }
         };
-  }
+
+    }
+
+    updateChartData(data:any[]):void{
+
+        this.updateDoughnutChart(data[0]);
+    }
+
+    updateDoughnutChart(countByTipoSociedad:{[estado:string]:number}):void{
+        try {
+
+            const labels = Object.keys(countByTipoSociedad);
+            const dataValues = labels.map((tipoSociedad) => countByTipoSociedad[tipoSociedad]);
+
+            //Actualiza los datos del gráfico
+            this.data.labels = labels;
+            if (this.data.datasets) {
+                this.data.datasets[0].data = dataValues;
+            }
+            
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+        
 
 }

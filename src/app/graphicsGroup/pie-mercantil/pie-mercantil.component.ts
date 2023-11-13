@@ -33,7 +33,7 @@ export class PieMercantilComponent implements OnInit {
     const dataValues = ['Activa', 'Disuelta', 'Disuelta y Liquidada', 'Inactiva', 'No definido', 'Cancelada'].map((estado) => countByEstado[estado] || 0);
 
     this.data = {
-                  labels: ['Activa', 'Disuelta', 'Disuelta y Liquidada','Inactiva','No definido',"Cancelada"],
+                  labels: this.data.labels,//['Activa', 'Disuelta', 'Disuelta y Liquidada','Inactiva','No definido',"Cancelada"],
                   datasets: [
                       {
                           data: dataValues,
