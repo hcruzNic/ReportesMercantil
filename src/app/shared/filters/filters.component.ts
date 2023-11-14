@@ -29,6 +29,7 @@ export class FiltersComponent implements OnInit {
   showCalendarRange : boolean = false;
   sociedadEstadoData:any[] | undefined;
   hasData: boolean = false;
+  
 
 
   date:Date | undefined;
@@ -81,7 +82,7 @@ export class FiltersComponent implements OnInit {
       if (value === 'D') {
         this.formGroup.get('date')?.setValue(new Date());
         this.showCalendarForDiario();
-        this.callSociedadesInscritas();
+        //this.callSociedadesInscritas();
       } else if (value === 'M') {
         this.formGroup.get('date')?.setValue(new Date());
         this.showCalendarForMes();
@@ -115,13 +116,15 @@ export class FiltersComponent implements OnInit {
       const selectedFrecuencia = this.formGroup.get('selectedFrecuencia')?.value;
       const frecuenciaValue = selectedFrecuencia in mapeoFrecuencia ? mapeoFrecuencia[selectedFrecuencia]:0;
 
+      const fechas = this.getFechasSegunFrecuencia(selectedFrecuencia);
+
       const parametros:IParametroReporte = {      
           frecuencia:{value:<number>(frecuenciaValue)},
           ubicacion:{
                 departamento:this.selectedDepartamento.IdDepartamento || 0,              
                 municipio:this.selectedMunicipio.IdMunicipio || 0},
-          fechas:{fecha_1:1699375322856, fecha_2:1699375322856},        
-          pagina:0      
+          fechas:fechas,//{fecha_1:1699375322856, fecha_2:1699375322856},        
+          pagina:0     
       }
 
       if (!this.sociedadEstadoData) {
@@ -140,17 +143,19 @@ export class FiltersComponent implements OnInit {
             const countByEstado = this.getCountByEstado(data);
             const countByTipoSociedad = this.getCountByTipoSociedad(data); 
             const countByDepartamento = this.getCountByDepartamento(data);  
-            const countByMunicipio = this.getCountByMunicipio(data);       
+            const countByMunicipio = this.getCountByMunicipio(data);   
+            const countByActividad = this.getCountByActividadComercial(data);    
 
             this.sharedDataService.setCountByEstado(countByEstado);
             this.sharedDataService.setCountByTipoSociedad(countByTipoSociedad);   
             this.sharedDataService.setCountByDepartamento(countByDepartamento);  
             this.sharedDataService.setCountByMunicipio(countByMunicipio);
+            this.sharedDataService.setCountByActividadComercial(countByActividad);
 
             }     
           )      
       }    
-  }
+  }  
 
   getCountByEstado(data:any[]):{[estado:string]:number}{
     const countByEstado:{[estado:string]:number} = {};
@@ -201,7 +206,42 @@ export class FiltersComponent implements OnInit {
     return countByMunicipio;
   }
 
+  getCountByActividadComercial(data: any[]): { [actividad: string]: number } {
+    const countByActividad: { [actividad: string]: number } = {};
 
+    data.forEach((sociedad: any) => {
+      const actividad = sociedad.ActividadComercial || 'No definido';
+      countByActividad[actividad] = (countByActividad[actividad] || 0) + 1;
+    });
+
+    return countByActividad;
+  }
+
+  getFechasSegunFrecuencia(frecuencia: string): { fecha_1: number, fecha_2: number } {
+    const ahora = Date.now(); // Fecha actual en milisegundos desde el 1 de enero de 1970 (época)
+  
+    switch (frecuencia) {
+      case 'D':
+        // Diario: Rango de 24 horas desde la fecha actual
+        return { fecha_1: ahora - 24 * 60 * 60 * 1000, fecha_2: ahora };
+      case 'M':
+        // Mensual: Rango de 30 días desde la fecha actual
+        return { fecha_1: ahora - 30 * 24 * 60 * 60 * 1000, fecha_2: ahora };
+      case 'T':
+        // Trimestral: Rango de 3 meses desde la fecha actual
+        return { fecha_1: ahora - 3 * 30 * 24 * 60 * 60 * 1000, fecha_2: ahora };
+      case 'S':
+        // Semestral: Rango de 6 meses desde la fecha actual
+        return { fecha_1: ahora - 6 * 30 * 24 * 60 * 60 * 1000, fecha_2: ahora };
+      case 'A':
+        // Anual: Rango de 1 año desde la fecha actual
+        return { fecha_1: ahora - 365 * 24 * 60 * 60 * 1000, fecha_2: ahora };
+      default:
+        // Manejo por defecto o adicional según tus necesidades
+        return { fecha_1: ahora, fecha_2: ahora }; // En este caso, se usa la fecha actual
+    }
+  } 
+  
   
 
   onSelect(selectedDep: IDepartamento):void{
@@ -211,7 +251,7 @@ export class FiltersComponent implements OnInit {
   };
 
   onDateSelect(event:any){
-    
+    this.callSociedadesInscritas();
   }
   
   showCalendarForDiario() {

@@ -103,4 +103,22 @@ export class SharedDataService {
     return this.countByMunicipio$.asObservable();
   }
 
+  /* A partir de acá inician los metodos para el grófico de pastel Actividad Comercial*/
+
+  private countByActividad:{[actividad:string]:number} = {};
+  private countByActividad$ = new BehaviorSubject<{[actividad:string]:number}>({});
+
+  setCountByActividadComercial(data:{[actividad:string]:number}):void{
+    this.countByActividad = data;
+    this.countByActividad$.next(data);
+  }
+
+  getCountByActividadComercial():{[actividad:string]:number}{
+    return this.countByActividad;
+  }
+
+  getCountByActividadComercial$():Observable<{[actividad:string]:number}>{
+    return this.countByActividad$.asObservable();
+  }
+
 }

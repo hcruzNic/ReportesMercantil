@@ -33,6 +33,7 @@ import { CalendarModule } from "primeng/calendar";
 import { SharedDataService } from "src/app/services/shared-data.service";
 import { PieDepartamentosComponent } from './graphicsGroup/pie-departamentos/pie-departamentos.component';
 import { PieMunicipiosComponent } from './graphicsGroup/pie-municipios/pie-municipios.component';
+import { PieActividadComponent } from './graphicsGroup/pie-actividad/pie-actividad.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { PieMunicipiosComponent } from './graphicsGroup/pie-municipios/pie-munic
     DoughnutMercantilComponent,
     PieActividadComercialComponent,
     PieDepartamentosComponent,
-    PieMunicipiosComponent
+    PieMunicipiosComponent,
+    PieActividadComponent
   ],
   imports: [
     BrowserModule,

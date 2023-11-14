@@ -88,7 +88,7 @@ export class PieDepartamentosComponent implements OnInit {
     this.updatePieChart(data[0]);
   }
 
-  updatePieChart(countByDepartamento:{[estado:string]:number}):void{
+  updatePieChart(countByDepartamento:{[departamento:string]:number}):void{
     try {
       
       const labels = Object.keys(countByDepartamento);

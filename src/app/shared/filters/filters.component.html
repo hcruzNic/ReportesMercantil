@@ -13,7 +13,7 @@
               </div>
                 <div *ngIf="showCalendarDiario && category.key == 'D'" class="col-12 calendar-container">
                   <!-- Calendario para Diario -->
-                  <p-calendar id="fecha"  dateFormat="dd/mm/yy" formControlName="date"></p-calendar>
+                  <p-calendar id="fecha"  dateFormat="dd/mm/yy" formControlName="date" (onSelect)="onDateSelect($event)"></p-calendar>
                   <br>
                 </div>
                 <div *ngIf="showCalendarMes && category.key == 'M'" class="col-12 calendar-container">
