@@ -30,7 +30,7 @@ export class PieMercantilComponent implements OnInit {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
 
-    const dataValues = ['Activa', 'Disuelta', 'Disuelta y Liquidada', 'Inactiva', 'No definido', 'Cancelada'].map((estado) => countByEstado[estado] || 0);
+    const dataValues = ['Activa', 'Inactiva', 'Cancelada', 'Disuelta', 'Disuelta y Liquidada', 'No definido'].map((estado) => countByEstado[estado] || 0);
 
     this.data = {
                   labels: this.data.labels,//['Activa', 'Disuelta', 'Disuelta y Liquidada','Inactiva','No definido',"Cancelada"],
@@ -56,10 +56,13 @@ export class PieMercantilComponent implements OnInit {
     };
 
     this.options = {
+      maintainAspectRatio: false,
       plugins: {
           legend: {
+              position:'left',
+              align:'start',
               labels: {
-                  usePointStyle: true,
+                  //usePointStyle: true,
                   color: textColor,
                   position:left,
                   display:false

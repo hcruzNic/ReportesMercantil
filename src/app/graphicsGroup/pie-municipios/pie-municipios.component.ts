@@ -73,10 +73,14 @@ export class PieMunicipiosComponent implements OnInit {
     };
 
     this.options = {
+      //resposive:true,
+      maintainAspectRatio: false,
       plugins: {
           legend: {
+              position:'left',
+              align:'start',
               labels: {
-                  usePointStyle: true,
+                  //usePointStyle: true,
                   color: textColor,
                   position:left,
                   display:false

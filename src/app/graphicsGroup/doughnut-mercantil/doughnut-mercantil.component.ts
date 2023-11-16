@@ -75,14 +75,15 @@ export class DoughnutMercantilComponent implements OnInit {
 
 
         this.options = {
+            maintainAspectRatio: false,
             cutout: '60%',
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
+            plugins:{
+                legend: {                    
+                        position: 'left',
+                        align: 'start',                   
                 }
-            }
+            },
+            
         };
 
     }

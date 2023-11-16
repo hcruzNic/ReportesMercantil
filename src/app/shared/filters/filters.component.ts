@@ -124,7 +124,7 @@ export class FiltersComponent implements OnInit {
                 departamento:this.selectedDepartamento.IdDepartamento || 0,              
                 municipio:this.selectedMunicipio.IdMunicipio || 0},
           fechas:fechas,//{fecha_1:1699375322856, fecha_2:1699375322856},        
-          pagina:0     
+          pagina:1     
       }
 
       if (!this.sociedadEstadoData) {

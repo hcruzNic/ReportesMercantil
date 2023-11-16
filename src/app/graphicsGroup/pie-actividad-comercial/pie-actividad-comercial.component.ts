@@ -29,6 +29,7 @@ export class PieActividadComercialComponent implements OnInit {
         };
 
         this.options = {
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     labels: {

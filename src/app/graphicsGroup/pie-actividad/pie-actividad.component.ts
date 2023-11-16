@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { left } from '@popperjs/core';
+import { Chart } from 'chart.js';
 import { SharedDataService } from "src/app/services/shared-data.service";
 
 @Component({
@@ -70,19 +71,25 @@ export class PieActividadComponent implements OnInit {
                       }
                   ]
     };
-
+ 
+    const nPosition = Chart.overrides.pie.plugins.legend.position = 'left';
+    const nAlign = Chart.overrides.pie.plugins.legend.align = 'start';
     this.options = {
+      maintainAspectRatio: false,
       plugins: {
-          legend: {
-              labels: {
-                  usePointStyle: true,
-                  color: textColor,
-                  position:left,
-                  display:false
-              }
+        legend: {
+          position: nPosition,
+          align: nAlign,
+          labels: {
+              //usePointStyle: true,
+              color: textColor,
+              position:left,
+              display:true
+          }
           }
       }
     }; 
+    
   }
 
 updateChartData(data:any[]):void{
