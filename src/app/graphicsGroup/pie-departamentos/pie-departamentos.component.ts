@@ -33,6 +33,7 @@ export class PieDepartamentosComponent implements OnInit {
                     labels: labels,
                     datasets: [
                         {
+                            label:'Cantidad: ',
                             data: dataValues,
                             backgroundColor: [  documentStyle.getPropertyValue('--blue-500'), 
                                         documentStyle.getPropertyValue('--yellow-500'), 
@@ -73,7 +74,8 @@ export class PieDepartamentosComponent implements OnInit {
                                             '#CCFF90', 
                                             '#757575', 
                                             '#B388FF',                                  
-                                        ]
+                                        ],
+                          hoverOffset:50
                         }
                     ]
       };
@@ -81,6 +83,24 @@ export class PieDepartamentosComponent implements OnInit {
       this.options = {
         maintainAspectRatio: false,
         plugins: {
+          tooltip: {
+            backgroundColor:'rgba(255, 255, 255, 0.8)',
+            titleColor:'rgb(0,0,0)',
+            titleFont:{weight: 'bold'},
+            titleAlign:'center',
+            titleSpacing:2,
+            titleMarginBottom:6,
+            bodyColor:'rgb(0,0,0)',
+            //bodyFont:({family:"'Arial', sans-serif"}),
+            bodyFont:{size:16},
+            padding:16,
+            //caretPadding:15,
+            caretSize:0,
+            cornerRadius:4,
+            displayColors:false,
+            //borderColor:'rgb(255, 0, 0)',
+            borderWidth:2,
+        },
             legend: {
                 display:true,
                 position:'left',
