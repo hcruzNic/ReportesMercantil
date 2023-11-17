@@ -12,32 +12,32 @@ export class DoughnutMercantilComponent implements OnInit {
 
   data: any = {};
   options: any;
+  labels: string[] = [];
+  dataValues:any[] = [];
 
   ngOnInit(): void {
 
         this.sharedDataService.getCountByTipoSociedad$().subscribe((countByTipoSociedad) =>{
             this.updateChartData([countByTipoSociedad]);
-            this.loadDefaultCharData();
-        });
-        
+            this.loadDefaultCharData(countByTipoSociedad);
+        });        
   }
 
-    loadDefaultCharData():void{
+    loadDefaultCharData(countByTipoSociedad: { [tipo: string]: any; }):void{
 
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
 
-        const countByTipoSociedad = this.sharedDataService.getCountByTipoSociedad();
-
-        const labels = Object.keys(countByTipoSociedad);
-        const data = Object.values(countByTipoSociedad);
+        //const countByTipoSociedad = this.sharedDataService.getCountByTipoSociedad();
+        //const labels = Object.keys(countByTipoSociedad);
+        //const data = Object.values(countByTipoSociedad);
 
         this.data = {
-            labels: labels,
+            labels: this.labels,
             datasets: [
                 {
-                    label:'Cantidad: ',
-                    data: data,
+                    //label:'Cantidad: ',
+                    data: this.dataValues.map(item => item.cantidad),
                     backgroundColor: [  documentStyle.getPropertyValue('--blue-500'), 
                                         documentStyle.getPropertyValue('--yellow-500'), 
                                         documentStyle.getPropertyValue('--green-500'),
@@ -86,9 +86,19 @@ export class DoughnutMercantilComponent implements OnInit {
 
         this.options = {
             maintainAspectRatio: false,
-            cutout: '60%',
+            cutout: '50%',
             plugins:{
                 tooltip: {
+                    callbacks: {
+                        label: (tooltipItem: any) => {                            
+                          const item = countByTipoSociedad[this.labels[tooltipItem.dataIndex]];
+                          const porcentaje = this.dataValues[tooltipItem.dataIndex].porcentaje;
+                          return [
+                                    `Cantidad: ${item}`,
+                                    `Porcentaje: ${porcentaje}%`
+                                ] 
+                        }
+                    },
                     backgroundColor:'rgba(255, 255, 255, 0.8)',
                     titleColor:'rgb(0,0,0)',
                     titleFont:{weight: 'bold'},
@@ -103,19 +113,19 @@ export class DoughnutMercantilComponent implements OnInit {
                     caretSize:0,
                     cornerRadius:4,
                     displayColors:false,
-                    //borderColor:'rgb(255, 0, 0)',
-                    borderWidth:2,
+                    borderColor:'rgb(192,192,192)',
+                    borderWidth:1,
                 },
                 legend: {     
-                        display:true,               
-                        position: 'left',
-                        align: 'start',  
-                        onHover:((event: { chart: { canvas: { style: { cursor: string; }; }; }; }) =>{
-                            event.chart.canvas.style.cursor = 'pointer';
-                          }),
-                          onLeave:((event: { chart: { canvas: { style: { cursor: string; }; }; }; }) =>{
-                            event.chart.canvas.style.cursor = 'default';
-                          }),                 
+                    display:true,               
+                    position: 'left',
+                    align: 'start',  
+                    onHover:((event: { chart: { canvas: { style: { cursor: string; }; }; }; }) =>{
+                        event.chart.canvas.style.cursor = 'pointer';
+                    }),
+                    onLeave:((event: { chart: { canvas: { style: { cursor: string; }; }; }; }) =>{
+                        event.chart.canvas.style.cursor = 'default';
+                    }),                 
                 }
             },
             
@@ -128,23 +138,37 @@ export class DoughnutMercantilComponent implements OnInit {
         this.updateDoughnutChart(data[0]);
     }
 
-    updateDoughnutChart(countByTipoSociedad:{[estado:string]:number}):void{
+    updateDoughnutChart(countByTipoSociedad:{[tipo:string]:number}):void{
         try {
 
-            const labels = Object.keys(countByTipoSociedad);
-            const dataValues = labels.map((tipoSociedad) => countByTipoSociedad[tipoSociedad]);
+            const total = Object.values(countByTipoSociedad).reduce((acc,value) => acc + value, 0);
+            this.labels = Object.keys(countByTipoSociedad);
+
+            this.dataValues = this.labels.map((tipoSociedad) => {
+                const cantidad = countByTipoSociedad[tipoSociedad];
+                const porcentaje = ((cantidad / total) * 100).toFixed(2);
+                return {cantidad,porcentaje,tipoSociedad};
+            });
+
+            if (typeof this.data !== 'object' || this.data === null) {
+                this.data = {};
+            }
 
             //Actualiza los datos del gráfico
-            this.data.labels = labels;
-            if (this.data.datasets) {
-                this.data.datasets[0].data = dataValues;
+            this.data.labels = this.labels;
+
+            if (!this.data.datasets) {                
+                this.data.datasets = [];
+            }
+
+            if (this.data.datasets.length > 0) {
+                this.data.datasets[0].data = this.dataValues.map(item => ({ cantidad: item.cantidad, porcentaje: item.porcentaje }));
+            }else{
+                this.data.datasets.push({data: this.dataValues.map(item => ({ cantidad: item.cantidad, porcentaje: item.porcentaje }))});
             }
             
         } catch (error) {
             console.error(error);
         }
-    }
-
-        
-
+    }      
 }

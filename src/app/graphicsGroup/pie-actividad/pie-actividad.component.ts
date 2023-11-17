@@ -14,69 +14,69 @@ export class PieActividadComponent implements OnInit {
 
   data: any = {};
   options: any; 
+  labels: string[] = [];
+  dataValues:any[] = [];
 
   ngOnInit(): void {
 
     this.sharedDataService.getCountByActividadComercial$().subscribe((countByActividad) => {
       this.updateChartData([countByActividad]);
-      this.loadDefaultChartData();
+      this.loadDefaultChartData(countByActividad);
     });
   }
 
-  loadDefaultChartData():void{
-    const countByActividad = this.sharedDataService.getCountByActividadComercial();
+  loadDefaultChartData(countByActividad:{[actividad:string]:any}):void{
+    //const countByActividad = this.sharedDataService.getCountByActividadComercial();
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
 
-      const labels = Object.keys(countByActividad);
-      const dataValues = Object.values(countByActividad);
+      //const labels = Object.keys(countByActividad);
+      //const dataValues = Object.values(countByActividad);
 
     this.data = {
-                  labels: labels,
+                  labels: this.labels,
                   datasets: [
                       {
                           label:'Cantidad: ',
-                          data: dataValues,
+                          data: this.dataValues.map(item => item.cantidad),
                           backgroundColor: [  documentStyle.getPropertyValue('--blue-500'), 
-                                        documentStyle.getPropertyValue('--yellow-500'), 
-                                        documentStyle.getPropertyValue('--green-500'),
-                                        documentStyle.getPropertyValue('--purple-500'),
-                                        documentStyle.getPropertyValue('--cyan-500'),
-                                        documentStyle.getPropertyValue('--orange-500'),
-                                        documentStyle.getPropertyValue('--indigo-500'),
-                                        documentStyle.getPropertyValue('--gray-500'),                                                                                
-                                        documentStyle.getPropertyValue('--red-500'),
-                                        documentStyle.getPropertyValue('--teal-500'),                                        
-                                        documentStyle.getPropertyValue('--pink-500'),                                        
-                                        '#8b4513', // SaddleBrown
-                                        '#1A237E', // DarkBlue
-                                        '#FFD700', // Amber
-                                        '#A52A2A', // Brown 
-                                        '#76FF03',
-                                        '#212121',
-                                        '#AA00FF',
-
-                                                      
-                                    ],
-                    hoverBackgroundColor: [ documentStyle.getPropertyValue('--blue-300'), 
-                                            documentStyle.getPropertyValue('--yellow-300'), 
-                                            documentStyle.getPropertyValue('--green-300'),
-                                            documentStyle.getPropertyValue('--purple-300'),
-                                            documentStyle.getPropertyValue('--cyan-300'),
-                                            documentStyle.getPropertyValue('--orange-300'),
-                                            documentStyle.getPropertyValue('--indigo-300'),
-                                            documentStyle.getPropertyValue('--gray-300'),                                                                                       
-                                            documentStyle.getPropertyValue('--red-300'),
-                                            documentStyle.getPropertyValue('--teal-300'),                                            
-                                            documentStyle.getPropertyValue('--pink-300'),
-                                            '#A1887F',
-                                            '#5C6BC0',  
-                                            '#FFFF8D', 
-                                            '#A1887F',  
-                                            '#CCFF90', 
-                                            '#757575', 
-                                            '#B388FF',                                  
-                                        ],
+                                              documentStyle.getPropertyValue('--yellow-500'), 
+                                              documentStyle.getPropertyValue('--green-500'),
+                                              documentStyle.getPropertyValue('--purple-500'),
+                                              documentStyle.getPropertyValue('--cyan-500'),
+                                              documentStyle.getPropertyValue('--orange-500'),
+                                              documentStyle.getPropertyValue('--indigo-500'),
+                                              documentStyle.getPropertyValue('--gray-500'),                                                                                
+                                              documentStyle.getPropertyValue('--red-500'),
+                                              documentStyle.getPropertyValue('--teal-500'),                                        
+                                              documentStyle.getPropertyValue('--pink-500'),                                        
+                                              '#8b4513', // SaddleBrown
+                                              '#1A237E', // DarkBlue
+                                              '#FFD700', // Amber
+                                              '#A52A2A', // Brown 
+                                              '#76FF03',
+                                              '#212121',
+                                              '#AA00FF',                                                      
+                                            ],
+                      hoverBackgroundColor: [ documentStyle.getPropertyValue('--blue-300'), 
+                                              documentStyle.getPropertyValue('--yellow-300'), 
+                                              documentStyle.getPropertyValue('--green-300'),
+                                              documentStyle.getPropertyValue('--purple-300'),
+                                              documentStyle.getPropertyValue('--cyan-300'),
+                                              documentStyle.getPropertyValue('--orange-300'),
+                                              documentStyle.getPropertyValue('--indigo-300'),
+                                              documentStyle.getPropertyValue('--gray-300'),                                                                                       
+                                              documentStyle.getPropertyValue('--red-300'),
+                                              documentStyle.getPropertyValue('--teal-300'),                                            
+                                              documentStyle.getPropertyValue('--pink-300'),
+                                              '#A1887F',
+                                              '#5C6BC0',  
+                                              '#FFFF8D', 
+                                              '#A1887F',  
+                                              '#CCFF90', 
+                                              '#757575', 
+                                              '#B388FF',                                  
+                                          ],
                         hoverOffset:50
                       }
                   ]
@@ -84,10 +84,21 @@ export class PieActividadComponent implements OnInit {
  
     const nPosition = Chart.overrides.pie.plugins.legend.position = 'left';
     const nAlign = Chart.overrides.pie.plugins.legend.align = 'start';
+
     this.options = {
       maintainAspectRatio: false,
       plugins: {
         tooltip: {
+          callbacks: {
+            label: (tooltipItem: any) => {                            
+              const item = countByActividad[this.labels[tooltipItem.dataIndex]];
+              const porcentaje = this.dataValues[tooltipItem.dataIndex].porcentaje;
+              return [
+                        `Cantidad: ${item}`,
+                        `Porcentaje: ${porcentaje}%`
+                    ] 
+            }
+          },
           backgroundColor:'rgba(255, 255, 255, 0.8)',
           titleColor:'rgb(0,0,0)',
           titleFont:{weight: 'bold'},
@@ -102,9 +113,9 @@ export class PieActividadComponent implements OnInit {
           caretSize:0,
           cornerRadius:4,
           displayColors:false,
-          //borderColor:'rgb(255, 0, 0)',
-          borderWidth:2,
-      },
+          borderColor:'rgb(192,192,192)',
+          borderWidth:1,
+        },
         legend: {
           display:true,
           position: nPosition,
@@ -121,32 +132,47 @@ export class PieActividadComponent implements OnInit {
               position:left,
               display:true
           }
-          }
+        }
       }
     }; 
     
   }
 
-updateChartData(data:any[]):void{
-  this.updatePieChart(data[0]);
-}
-
-updatePieChart(countByActividad:{[actividad:string]:number}):void{
-  try {
-    
-    const labels = Object.keys(countByActividad);
-    const dataValues =  labels.map((actividad) => countByActividad[actividad]);
-
-    this.data.labels = labels;
-    if (this.data.datasets) {
-      this.data.datasets[0].data = dataValues;
-    }
-
-  } catch (error) {
-    console.error(error);
+  updateChartData(data:any[]):void{
+    this.updatePieChart(data[0]);
   }
-}
 
+  updatePieChart(countByActividad:{[actividad:string]:number}):void{
+    try {
+      
+      const total = Object.values(countByActividad).reduce((acc,value) => acc + value, 0);
+      this.labels = Object.keys(countByActividad);
 
+      this.dataValues =  this.labels.map((actividad) => {
+          const cantidad = countByActividad[actividad];
+          const porcentaje = ((cantidad / total) * 100).toFixed(2);
+          return {cantidad,porcentaje,actividad};
+      });
+
+      if (typeof this.data !== 'object' || this.data === null) {
+        this.data = {};
+      }
+
+      this.data.labels = this.labels;
+
+      if (!this.data.datasets) {                
+        this.data.datasets = [];
+      }
+
+      if (this.data.datasets.length > 0) {
+        this.data.datasets[0].data = this.dataValues.map(item => ({ cantidad: item.cantidad, porcentaje: item.porcentaje }));
+      }else{
+        this.data.datasets.push({data: this.dataValues.map(item => ({ cantidad: item.cantidad, porcentaje: item.porcentaje }))});
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 }
