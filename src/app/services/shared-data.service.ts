@@ -121,4 +121,12 @@ export class SharedDataService {
     return this.countByActividad$.asObservable();
   }
 
+  private showKpiCardSource = new BehaviorSubject<boolean>(true);
+  showKpiCard$ = this.showKpiCardSource.asObservable();
+
+  setShowKpiCard(value: boolean): void {
+    this.showKpiCardSource.next(value);
+  }
+  
+
 }

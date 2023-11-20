@@ -72,3 +72,7 @@
   font-size: 70%;
   padding-left: 0.2em;
 }
+
+.custom-font-size .card-value {
+  font-size: 100%; 
+}

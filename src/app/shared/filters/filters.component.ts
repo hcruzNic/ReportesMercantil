@@ -29,6 +29,7 @@ export class FiltersComponent implements OnInit {
   showCalendarRange : boolean = false;
   sociedadEstadoData:any[] | undefined;
   hasData: boolean = false;
+  //showKpiCard: boolean = false;
   
 
 
@@ -338,6 +339,29 @@ export class FiltersComponent implements OnInit {
       this.rangeDates = [startDate,endDate];
       this.formGroup.get('rangeDates')?.setValue(this.rangeDates);
     }
+  }
+
+  clearParameters(){
+    this.formGroup.reset();
+
+    this.showCalendarDiario = false;
+    this.showCalendarMes = false;
+    this.showCalendarTrim = false;
+    this.showCalendarSem = false;
+    this.showCalendarAnual = false;
+    this.showCalendarRange = false;
+    this.rangeDates = undefined;
+
+    this.periodo.forEach(category => {
+      this.formGroup.get('selectedFrecuencia')?.setValue(null);
+      this.formGroup.get('selectedDepartamento')?.setValue(null);
+      this.formGroup.get('selectedMunicipio')?.setValue(null);
+    });
+
+    //this.showKpiCard = false;
+    this.sharedDataService.setShowKpiCard(false);
+
+    this.callSociedadesInscritas();
   }
 
 }

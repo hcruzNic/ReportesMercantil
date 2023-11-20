@@ -14,9 +14,10 @@
         <span class="card-text">Total Declaraciones Vigentes</span>
         <i class="pi pi-book icon"></i>
     </div>    
-    <div class="kpi-card grey-dark">
-        <span class="card-value">00,000 </span>
-        <span class="card-text">Total Sales</span>
+    <div *ngIf="showKpiCard && totalPorDepartamentoValue" class="kpi-card grey-dark custom-font-size">
+        <span class="card-value">{{ totalPorDepartamentoValue }}</span>
+        <span class="card-value">({{ porcentaje }})%</span>
+        <span class="card-text">Total por Departamento</span>
         <i class="pi pi-book icon"></i>
     </div> 
-  </div>
+</div>
